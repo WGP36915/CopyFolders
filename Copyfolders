@@ -1,0 +1,29 @@
+Public Sub Copyfolders()
+   
+    Dim strSfolder As String
+    Dim strDfolder As String
+
+    Dim strSubSfolder As String
+    Dim i, countY As Integer
+    Set fso = CreateObject("scripting.filesystemobject")
+
+    strSfolder = InputBox("请输入源文件夹路径")
+    strDfolder = InputBox("请输入目标文件夹路径")
+    With ThisWorkbook.Worksheets("Sheet1")
+        For i = 2 To Sheets("Sheet1").UsedRange.Rows.Count
+            strSubSfolder = strSfolder & Cells(i, 1).Value
+            If fso.FolderExists(strSubSfolder) Then
+                fso.Copyfolder strSubSfolder, strDfolder
+                countY = countY + 1
+            Else
+                MsgBox strSubSfolder & "文件夹不存在", vbCritical
+                If MsgBox("提示：是否继续运行？", vbOKCancel, "提示") = vbCancel Then
+                    Exit For
+                End If
+            End If
+            
+        Next
+        MsgBox "您已移动了" & countY & "个文件夹，请到相应目录下检查！"
+    End With
+
+End Sub
